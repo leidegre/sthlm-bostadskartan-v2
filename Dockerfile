@@ -3,6 +3,7 @@ FROM node
 COPY index.html /app/index.html
 COPY dist/*.js /app/dist/
 COPY server/*.js /app/server/
+COPY server/config.json /app/server/config.json
 
 COPY package.json /app/package.json
 RUN cd /app; npm install --production
