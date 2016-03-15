@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.3.4",
     "cheerio": "^0.20.0",
     "collections": "^3.0.0",
     "express": "^4.13.4",
