@@ -1,0 +1,45 @@
+{
+  "name": "sthlm-bostadskartan.v2",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "exit 0",
+    "start": "node devServer.js",
+    "clean": "rimraf dist",
+    "build:webpack": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
+    "build": "npm run clean && npm run build:webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^0.20.0",
+    "collections": "^3.0.0",
+    "express": "^4.13.4",
+    "isomorphic-fetch": "^2.1.1",
+    "popsicle": "^5.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.0.20",
+    "babel-eslint": "^4.1.3",
+    "babel-loader": "^6.0.1",
+    "babel-polyfill": "^6.3.14",
+    "babel-preset-es2015": "^6.0.15",
+    "babel-preset-react": "^6.0.15",
+    "babel-preset-stage-0": "^6.0.15",
+    "cross-env": "^1.0.7",
+    "eslint": "^1.10.3",
+    "eslint-plugin-react": "^3.6.2",
+    "immutable": "^3.7.6",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "react-hot-loader": "^1.3.0",
+    "react-redux": "^4.4.0",
+    "redux": "^3.3.1",
+    "redux-logger": "^2.6.1",
+    "redux-thunk": "^2.0.1",
+    "rimraf": "^2.5.2",
+    "tape": "^4.5.1",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.12.1"
+  }
+}
