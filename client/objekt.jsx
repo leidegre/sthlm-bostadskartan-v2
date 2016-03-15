@@ -28,9 +28,10 @@ function AnnonsTableRow(props) {
   const entry = props.entry
   return (
     <tr>
-      <td><code>{`${entry.rum} rum`}</code></td>
-      <td><a href={`https://bostad.stockholm.se${entry.link}`}><span className='glyphicon glyphicon-link'></span></a> {entry.gatuadress}</td>
+      <td><code>{entry.aid}</code> <a href={`https://bostad.stockholm.se${entry.link}`}><span className='glyphicon glyphicon-link'></span></a></td>
+      <td>{entry.gatuadress}</td>
       <td>{entry.våning}</td>
+      <td>{entry.rum}</td>
       <td>{entry.yta}</td>
       <td>{entry.hyra}</td>
       <td>{ entry.annons_t_o_m ? <DagarKvar date={entry.annons_t_o_m} /> : '' }</td>
@@ -66,7 +67,7 @@ function Kötid(props) {
       <dt>snitt</dt>
       <dd className='text-nowrap'><Colorize value={kötid.avg} domain={kötid} display={utils.displayMonthYear} /> (±{(kötid.stdev / (365.25 * 24 * 3600 * 1000)).toFixed(1) } år) </dd>
       <dt>längsta</dt>
-      <dd><Colorize value={kötid.min} domain={kötid} display={utils.displayMonthYear} reverseDomain={true} /></dd>
+      <dd className='text-nowrap'><Colorize value={kötid.min} domain={kötid} display={utils.displayMonthYear} reverseDomain={true} /> {' '} {props.minKötid < kötid.max ? <span className='glyphicon glyphicon-home' /> : ''}</dd>
     </dl>
   )
 }
@@ -93,13 +94,14 @@ function StatistikGroupTableRow(props) {
     const entry = entries[0]
     return (
       <tr>
-        <td><code>{`${props.aid}`}</code></td>
-        <td>{entry.gatuadress}</td>
-        <td>{entry.våning}</td>
-        <td>{entry.yta}</td>
-        <td><Colorize value={entry.hyra_per_kvm} domain={props.hyra_domain} /></td>
-        <td><Colorize value={entry.kötid} domain={props.kötid_domain} display={utils.displayMonthYear} reverseDomain={true} /></td>
+        <td><code>{`${props.aid}`}</code> <a href={`https://bostad.stockholm.se${entry.link}`}><span className='glyphicon glyphicon-link'></span></a></td>
         <td></td>
+        <td>{entry.gatuadress}</td>
+        <td>{entry.rum}</td>
+        <td>{entry.yta}</td>
+        <td className='text-nowrap'><Colorize value={entry.hyra_per_kvm} domain={props.hyra_domain} /> {' '} {props.minKötid < entry.kötid ? <span className='glyphicon glyphicon-home' /> : ''}</td>
+        <td>{entry.våning}</td>
+        <td><Colorize value={entry.kötid} domain={props.kötid_domain} display={utils.displayMonthYear} reverseDomain={true} /></td>
       </tr>
     )
   }
@@ -107,13 +109,14 @@ function StatistikGroupTableRow(props) {
   const ytor = utils.Seq(entries).map((x) => parseInt(x.yta)).distinct().orderBy((a, b) => a - b)
   return (
     <tr>
-      <td><code>{`${props.aid}`}</code></td>
+      <td><code>{`${props.aid}`}</code> <a href={`https://bostad.stockholm.se${entries[0].link}`}><span className='glyphicon glyphicon-link'></span></a></td>
+      <td>{ entries.length.toString() }</td>
       <td style={{ whiteSpace: 'pre' }}>{utils.distinct(entries.map((x) => x.gatuadress)).join('\n') }</td>
-      <td>{våningar.first} - {våningar.last}</td>
+      <td>{entries[0].rum}</td>
       <td>{ytor.first} - {ytor.last}</td>
       <td><Hyra hyra={props.hyra} /></td>
-      <td><Kötid kötid={props.kötid} /></td>
-      <td>{entries.length.toString()}</td>
+      <td>{våningar.first} - {våningar.last}</td>
+      <td><Kötid kötid={props.kötid} minKötid={props.minKötid} /></td>
     </tr>
   )
 }
@@ -136,6 +139,7 @@ class Objekt extends Component {
                 <th></th>
                 <th>Gatuadress</th>
                 <th>Våning</th>
+                <th>Rum</th>
                 <th>Yta</th>
                 <th>Hyra</th>
                 <th><small title='Antalet dagar kvar till anmälan stänger'>Dagar kvar</small></th>
@@ -166,6 +170,7 @@ class Objekt extends Component {
           kötid
         })
       }
+      stuff.sort((a, b) => a.kötid.avg - b.kötid.avg)
       return (
         <div>
           <h2>Objekt</h2>
@@ -173,17 +178,18 @@ class Objekt extends Component {
             <thead>
               <tr>
                 <th></th>
+                <th>#</th>
                 <th>Gatuadress</th>
-                <th>Våning</th>
+                <th>Rum</th>
                 <th>Yta</th>
                 <th>Hyra/kvm</th>
+                <th>Våning</th>
                 <th>Kötid sedan</th>
-                <th>#</th>
               </tr>
             </thead>
             <tbody>
               {
-                stuff.map((x) => <StatistikGroupTableRow {...x} hyra_domain={cluster.hyra_domain} kötid_domain={cluster.kötid_domain} />)
+                stuff.map((x) => <StatistikGroupTableRow {...x} hyra_domain={cluster.hyra_domain} kötid_domain={cluster.kötid_domain} minKötid={this.props.minKötid} />)
               }
             </tbody>
           </table>
@@ -196,7 +202,8 @@ class Objekt extends Component {
 function mapStateToProps(state) {
   return {
     cluster: state.bostad.get('cluster'),
-    dataSource: state.bostad.get('dataSource')
+    dataSource: state.bostad.get('dataSource'),
+    minKötid: new Date(state.bostad.get('minKötid')).getTime()
   }
 }
 

@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "exit 0",
-    "start": "node devServer.js",
+    "start": "node server/index.js",
     "clean": "rimraf dist",
     "build:webpack": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
     "build": "npm run clean && npm run build:webpack"
