@@ -2,36 +2,35 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <meta charset='utf-8'>
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
+  <script src='https://code.jquery.com/jquery-2.2.1.min.js'></script>
+  <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
   <style>
     html,
     body {
       height: 100%;
       width: 100%;
     }
-    
-    div.max-height {
-      height: 100%;
-    }
   </style>
 </head>
 
 <body>
-  <div class="container-fluid max-height">
-    <div class="row max-height">
-      <div class="col-md-8 max-height">
-        <div id="map" style="width:100%;height:100%"></div>
-      </div>
-      <div class="col-md-4">
+
+  <div style='position: fixed; width: 66%; height: 100%'>
+    <div id='map' style='width:100%;height:100%'></div>
+  </div>
+  <div style='position: fixed; right: 0; width: 34%; height: 100%; overflow-y: scroll'>
+    <div class='container-fluid'>
+      <div class='row'>
         <div id='root'></div>
       </div>
     </div>
   </div>
-  <script src="/static/bundle.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?v=3&libraries=geometry&callback=initMap" async defer></script>
+
+  <script src='/static/bundle.js'></script>
+  <script src='https://maps.googleapis.com/maps/api/js?v=3&libraries=geometry&callback=initMap' async defer></script>
+
 </body>
 
 </html>
