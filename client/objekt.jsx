@@ -28,7 +28,7 @@ function AnnonsTableRow(props) {
   const entry = props.entry
   return (
     <tr>
-      <td className='text-nowrap'><code>{entry.aid}</code> <a href={`https://bostad.stockholm.se${entry.link}`}><span className='glyphicon glyphicon-link'></span></a></td>
+      <td className='text-nowrap'><code>{entry.aid}</code> <a href={`https://bostad.stockholm.se${entry.link}`} target='_blank'><span className='glyphicon glyphicon-link'></span></a></td>
       <td>{entry.gatuadress}</td>
       <td>{entry.våning}</td>
       <td>{entry.rum}</td>
@@ -65,7 +65,7 @@ function Kötid(props) {
       <dt className='text-muted'>kortaste</dt>
       <dd><Colorize value={kötid.max} domain={kötid} display={utils.displayMonthYear} reverseDomain={true} /> {' '} {props.minKötid < kötid.max ? <span className='glyphicon glyphicon-home' /> : ''}</dd>
       <dt className='text-muted'>snitt</dt>
-      <dd className='text-nowrap'><Colorize value={kötid.avg} domain={kötid} display={utils.displayMonthYear} /> (±{(kötid.stdev / (365.25 * 24 * 3600 * 1000)).toFixed(1) } år) </dd>
+      <dd className='text-nowrap'><Colorize value={kötid.avg} domain={kötid} display={utils.displayMonthYear} reverseDomain={true} /> (±{(kötid.stdev / (365.25 * 24 * 3600 * 1000)).toFixed(1) } år) </dd>
       <dt className='text-muted'>längsta</dt>
       <dd className='text-nowrap'><Colorize value={kötid.min} domain={kötid} display={utils.displayMonthYear} reverseDomain={true} /></dd>
     </dl>
@@ -94,14 +94,14 @@ function StatistikGroupTableRow(props) {
     const entry = entries[0]
     return (
       <tr>
-        <td className='text-nowrap'><code>{`${props.aid}`}</code> <a href={`https://bostad.stockholm.se${entry.link}`}><span className='glyphicon glyphicon-link'></span></a></td>
+        <td className='text-nowrap'><code>{`${props.aid}`}</code> <a href={`https://bostad.stockholm.se${entry.link}`} target='_blank'><span className='glyphicon glyphicon-link'></span></a></td>
         <td></td>
         <td>{entry.gatuadress}</td>
         <td>{entry.rum}</td>
         <td>{entry.yta}</td>
         <td className='text-nowrap'><Colorize value={entry.hyra_per_kvm} domain={props.hyra_domain} /></td>
         <td>{entry.våning}</td>
-        <td><Colorize value={entry.kötid} domain={props.kötid_domain} display={utils.displayMonthYear} reverseDomain={true} /> {' '} {props.minKötid < entry.kötid ? <span className='glyphicon glyphicon-home' /> : ''}</td>
+        <td><Colorize value={entry.kötid.getTime() } domain={props.kötid_domain} display={utils.displayMonthYear} reverseDomain={true} /> {' '} {props.minKötid < entry.kötid ? <span className='glyphicon glyphicon-home' /> : ''}</td>
       </tr>
     )
   }
@@ -109,7 +109,7 @@ function StatistikGroupTableRow(props) {
   const ytor = utils.Seq(entries).map((x) => parseInt(x.yta)).distinct().orderBy((a, b) => a - b)
   return (
     <tr>
-      <td className='text-nowrap'><code>{`${props.aid}`}</code> <a href={`https://bostad.stockholm.se${entries[0].link}`}><span className='glyphicon glyphicon-link'></span></a></td>
+      <td className='text-nowrap'><code>{`${props.aid}`}</code> <a href={`https://bostad.stockholm.se${entries[0].link}`} target='_blank'><span className='glyphicon glyphicon-link'></span></a></td>
       <td>{ entries.length.toString() }</td>
       <td style={{ whiteSpace: 'pre' }}>{utils.distinct(entries.map((x) => x.gatuadress)).join('\n') }</td>
       <td>{entries[0].rum}</td>

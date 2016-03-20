@@ -113,6 +113,7 @@ function makeClusters(results, opts) {
   for (var i = 0; i < clusters.length; i++) {
     clusters[i].hyra_domain = hyra_domain
     if (kötid_domain) {
+      clusters[i].kötid_cluster = average(clusters[i].entries, (x) => x.kötid.getTime()) // oberoende rum
       clusters[i].kötid_domain = kötid_domain
     }
   }

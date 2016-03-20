@@ -16,8 +16,8 @@ function KötidRow(props) {
         {' '}
         {minKötid < props.stats.max ? <span className='glyphicon glyphicon-home' /> : ''}
       </td>
-      <td><Colorize value={props.stats.avg} display={utils.displayMonthYear} domain={props.domain} /></td>
-      <td>{ (props.stats.stdev / (365.25 * 24 * 3600 * 1000)).toFixed(1) } år</td>
+      <td><Colorize value={props.stats.avg} display={utils.displayMonthYear} domain={props.domain} reverseDomain={true} /></td>
+      <td>{ props.stats.n > 1 ? `${(props.stats.stdev / (365.25 * 24 * 3600 * 1000)).toFixed(1)} år` : null }</td>
       <td><Colorize value={props.stats.min} display={utils.displayMonthYear} domain={props.domain} reverseDomain={true} /></td>
       <td>{props.stats.n}</td>
     </tr>

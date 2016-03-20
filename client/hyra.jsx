@@ -12,7 +12,7 @@ function HyraRow(props) {
       <td>{props.label}</td>
       <td><Colorize value={props.stats.min} domain={props.domain} /></td>
       <td><Colorize value={props.stats.avg} domain={props.domain} /></td>
-      <td>{ props.stats.stdev.toFixed(1) }</td>
+      <td>{ props.stats.n > 1 ? props.stats.stdev.toFixed(1) : null }</td>
       <td><Colorize value={props.stats.max} domain={props.domain} /></td>
       <td>{props.stats.n}</td>
     </tr>

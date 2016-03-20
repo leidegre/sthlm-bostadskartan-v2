@@ -34,8 +34,6 @@ class App extends Component {
       <div>
         <Controls />
         <Clusters />
-        <Hyra />
-        <Kötid />
         <Objekt />
       </div>
     )
