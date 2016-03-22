@@ -1,6 +1,7 @@
 'use strict'
 
 const config = require('./config')
+const cache = require('./cache')
 
 const express = require('express')
 const router = express.Router()
@@ -12,7 +13,6 @@ const GeocodingService = require('./geocoding-service')
 const geocodingService = new GeocodingService()
 
 const MultiMap = require('collections/multi-map')
-const Dict = require('collections/dict')
 
 let readyState = false
 geocodingService.open('data/geocoding.db', (err) => {
@@ -20,7 +20,8 @@ geocodingService.open('data/geocoding.db', (err) => {
   readyState = true
 })
 
-// var cache = new Dict()
+// This will set the cache control header to public
+// (which will allow the browser to cache the request for a while)
 function outputCache(duration) {
   return (req, res, next) => {
     res.setHeader('Cache-Control', `public, max-age=${duration * 60}`)
@@ -82,15 +83,14 @@ function geocode(results) {
   })
 }
 
-const cache = new Dict()
-
 router.get('/now', outputCache(15), (req, res) => {
   if (!readyState) {
     res.status(503).end()
     return
   }
-  const cachedResults = cache.get(req.originalUrl)
+  const cachedResults = cache.getCacheEntry(req.originalUrl, 15 * 60 * 1000)
   if (cachedResults) {
+    console.log(`GET ${req.originalUrl} (served from cache)`)
     res.json(cachedResults)
     return
   }
@@ -100,24 +100,25 @@ router.get('/now', outputCache(15), (req, res) => {
       if (req.query.geocode && req.query.geocode !== '0') {
         return geocode(results)
           .then((results) => {
-            cache.set(req.originalUrl, results)
+            cache.putCacheEntry(req.originalUrl, results)
             res.json(results)
           })
       } else {
-        cache.set(req.originalUrl, results)
+        cache.putCacheEntry(req.originalUrl, results)
         res.json(results)
       }
     })
     .catch((err) => res.status(500).send(err.message).end())
 })
 
-router.get('/statistik/:year', outputCache(60), (req, res) => {
+router.get('/statistik/:year', outputCache(1440), (req, res) => {
   if (!readyState) {
     res.status(503).end()
     return
   }
-  const cachedResults = cache.get(req.originalUrl)
+  const cachedResults = cache.getCacheEntry(req.originalUrl, 1440 * 60 * 1000)
   if (cachedResults) {
+    console.log(`GET ${req.originalUrl} (served from cache)`)
     res.json(cachedResults)
     return
   }
@@ -133,11 +134,11 @@ router.get('/statistik/:year', outputCache(60), (req, res) => {
       if (req.query.geocode && req.query.geocode !== '0') {
         return geocode(results)
           .then((results) => {
-            cache.set(req.originalUrl, results)
+            cache.putCacheEntry(req.originalUrl, results)
             res.json(results)
           })
       } else {
-        cache.set(req.originalUrl, results)
+        cache.putCacheEntry(req.originalUrl, results)
         res.json(results)
       }
     })
