@@ -25,5 +25,8 @@ module.exports = {
       loaders: ['react-hot', 'babel'],
       include: path.join(__dirname, 'client')
     }]
+  },
+  resolve: {
+    extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx']
   }
 };

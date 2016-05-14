@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { setDataSource, getNow, getStatistik, setClusterSize, setMinKötid, setMinRoomSize } from './actionCreators';
+import { setDataSource, getNow, getStatistik, setClusterSize, setMinKötid, setMinRoomSize, setMaxRoomSize } from './actionCreators';
 
 class Controls extends Component {
   constructor(props, context) {
@@ -15,6 +15,9 @@ class Controls extends Component {
     }
     this._minRoomSizeChanged = (e) => {
       this.props.dispatch(setMinRoomSize({ minRoomSize: parseInt(e.target.value) }))
+    }
+    this._maxRoomSizeChanged = (e) => {
+      this.props.dispatch(setMaxRoomSize({ maxRoomSize: e.target.value ? parseInt(e.target.value) : null }))
     }
     this._visaEndastNyproduktionChanged = (e) => {
       this.setState({
@@ -63,6 +66,15 @@ class Controls extends Component {
 
           <div className='col-md-3'>
             <select className='form-control' value={this.props.minRoomSize} onChange={this._minRoomSizeChanged}>
+              <option value='1'>1 rum</option>
+              <option value='2'>2 rum</option>
+              <option value='3'>3 rum</option>
+              <option value='4'>4 rum</option>
+              <option value='5'>5 rum</option>
+              <option value='6'>6 rum</option>
+            </select>
+            <select className='form-control' value={this.props.maxRoomSize} onChange={this._maxRoomSizeChanged}>
+              <option value=''></option>
               <option value='1'>1 rum</option>
               <option value='2'>2 rum</option>
               <option value='3'>3 rum</option>

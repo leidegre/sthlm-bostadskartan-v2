@@ -31,6 +31,9 @@ function bostad(state = Immutable.Map({ dataSource: 'now', clusterSize: 1000, mi
     case '@@bostad/set-min-room-size': {
       return updateCluster(state.set('minRoomSize', action.minRoomSize))
     }
+    case '@@bostad/set-max-room-size': {
+      return updateCluster(state.set('maxRoomSize', action.maxRoomSize))
+    }
     case '@@bostad/set-cluster': {
       return state.set('cluster', action.cluster)
     }

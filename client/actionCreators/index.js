@@ -21,6 +21,13 @@ export function setMinRoomSize({minRoomSize}) {
   }
 }
 
+export function setMaxRoomSize({maxRoomSize}) {
+  return {
+    type: '@@bostad/set-max-room-size',
+    maxRoomSize
+  }
+}
+
 export function setClusterSize({clusterSize}) {
   return {
     type: '@@bostad/set-cluster-size',
@@ -45,7 +52,7 @@ export function setCluster({cluster}) {
 export function getNow({}) {
   return (dispatch, getState) => {
     const { bostad } = getState()
-    fetch(`/api/now?geocode=1&min-rum=${encodeURIComponent(bostad.get('minRoomSize'))}`).then((res) => {
+    fetch(`/api/now?geocode=1&min-rum=${encodeURIComponent(bostad.get('minRoomSize'))}&max-rum=${encodeURIComponent(bostad.get('maxRoomSize', null))}`).then((res) => {
       res.json().then((results) => {
         // parse date
         for (let i = 0; i < results.length; i++) {
@@ -65,7 +72,7 @@ export function getStatistik({buildingType}) {
   return (dispatch, getState) => {
     const { bostad } = getState()
     let year = parseInt(/Y(\d{4})/.exec(bostad.get('dataSource'))[1])
-    fetch(`/api/statistik/${year}?buildingType=${encodeURIComponent(buildingType || '')}&geocode=1&min-rum=${encodeURIComponent(bostad.get('minRoomSize'))}`)
+    fetch(`/api/statistik/${year}?buildingType=${encodeURIComponent(buildingType || '')}&geocode=1&min-rum=${encodeURIComponent(bostad.get('minRoomSize'))}&max-rum=${encodeURIComponent(bostad.get('maxRoomSize'))}`)
       .then((res) => {
         res.json().then((results) => {
           // parse date

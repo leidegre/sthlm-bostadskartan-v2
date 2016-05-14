@@ -29,10 +29,24 @@ function outputCache(duration) {
   }
 }
 
+const NUMBER_PATTERN = /\d+(?:(?:\.|,)\d+)?/
+function parseNumber(s) {
+  const m = NUMBER_PATTERN.exec(s)
+  if (m) {
+    return parseFloat(m[0].replace(',', '.'))
+  }
+  return Number.NaN
+}
+
 function filterResults(results, query) {
-  if (query['min-rum']) {
-    const minRum = query['min-rum']
-    results = results.filter((entry) => minRum.localeCompare(entry.rum) <= 0)
+  // grep number
+  const minRum = parseNumber(query['min-rum'])
+  if (isFinite(minRum)) {
+    results = results.filter((entry) => (minRum - parseNumber(entry.rum)) <= 0) 
+  }
+  const maxRum = parseNumber(query['max-rum'])
+  if (isFinite(maxRum)) {
+    results = results.filter((entry) => (parseNumber(entry.rum) - maxRum) <= 0)
   }
   return results
 }
